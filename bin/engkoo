@@ -1,0 +1,22 @@
+#! /usr/bin/env ruby
+
+require 'net/http'
+require 'json'
+
+def search_engkoo(query)
+  resp  = Net::HTTP.post_form(URI('http://dict.bing.com.cn/io.aspx'),
+                              'q' => query, 't' => 'sug', 'ulang' => 'ZH-CN',
+                              'tlang' => 'EN-US')
+
+  resp_json = JSON.parse(resp.body)
+  answers = resp_json["ACS"]["AC"]
+  answers.each do |answer|
+    word = answer["$"].to_s
+    expl = answer["$I"].to_s
+    word.gsub!(/\{#\*(.+)\*\$\}/, '\1') 
+      puts "#{word} ==>  #{expl}"
+  end
+end
+
+query = ARGV.join(" ") #hack for command line
+search_engkoo(query)
