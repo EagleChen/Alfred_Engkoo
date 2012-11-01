@@ -10,6 +10,8 @@ def search_engkoo(query)
 
   resp_json = JSON.parse(resp.body)
   answers = resp_json["ACS"]["AC"]
+  puts answers[0]["$I"].to_s
+  return #only see the simple explanation
   answers.each do |answer|
     word = answer["$"].to_s
     expl = answer["$I"].to_s
